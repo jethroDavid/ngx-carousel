@@ -9,77 +9,18 @@ import {
   ViewChild,
   AfterViewInit,
   OnChanges,
-} from '@angular/core';
+} from "@angular/core";
 
-import Carousel from '../../model/Carousel';
-import { SwiperDirective } from '../../directives/swiper.directive';
+import Carousel from "../../model/Carousel";
+import { SwiperDirective } from "../../directives/swiper.directive";
 @Component({
-  selector: 'carousel-component',
-  styles: [
-    `
-      :host {
-        display: flex;
-      }
-      :host .container {
-        margin: 0 auto;
-        width: 600px;
-        height: 400px;
-        position: relative;
-      }
-      :host .container .carousel {
-        height: 100%;
-        width: 100%;
-        position: absolute;
-        -webkit-transform-style: preserve-3d;
-        -moz-transform-style: preserve-3d;
-        -o-transform-style: preserve-3d;
-        transform-style: preserve-3d;
-      }
-      :host.ready .carousel {
-        -webkit-transition: -webkit-transform 300ms;
-        -moz-transition: -moz-transform 300ms;
-        -o-transition: -o-transform 300ms;
-        transition: transform 300ms;
-      }
-      :host .container .carousel::content >>> .item-carousel {
-        display: block;
-        position: absolute;
-        border: 1px solid black;
-        width: 100%;
-        height: 100%;
-        text-align: center;
-        transform-style: preserve-3d;
-        opacity: 0;
-      }
-      :host.ready .carousel::content >>> .item-carousel {
-        -webkit-transition: opacity 300ms, -webkit-transform 300ms;
-        -moz-transition: opacity 300ms, -moz-transform 300ms;
-        -o-transition: opacity 300ms, -o-transform 300ms;
-        transition: opacity 300ms, transform 300ms;
-      }
-
-      :host .container .carousel::content >>> .item-carousel img {
-        user-drag: none;
-        user-select: none;
-        -moz-user-select: none;
-        -webkit-user-drag: none;
-        -webkit-user-select: none;
-        -ms-user-select: none;
-      }
-
-      :host .container .carousel::content >>> .item-carousel.next,
-      :host .container .carousel::content >>> .item-carousel.prev,
-      :host .container .carousel::content >>> .item-carousel.actual {
-        opacity: 0.95;
-      }
-    `,
-  ],
-  template:
-    '<div class="container" #container>\n' +
-    '  <div class="carousel" #carousel swiper (domChange)="onDomChange($event)">\n' +
-    '    <ng-content select=".item-carousel"></ng-content>\n' +
-    '  </div>\n' +
-    '</div>',
+  selector: "carousel-component",
+  styleUrls: ["./carousel.component.css"],
+  template: `<div class="container" #container>
+    <div class="carousel" #carousel swiper (domChange)="onDomChange($event)">
+      <ng-content select=".item-carousel"></ng-content>
+    </div>
+  </div>`,
 })
 export class CarouselComponent implements OnInit, OnChanges, AfterViewInit {
   public carousel: Carousel;
@@ -98,7 +39,7 @@ export class CarouselComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() lockSlides = false;
   @Input() initialSlide = 0;
   @Input() loop = false;
-  @Input() mode = 'horizontal';
+  @Input() mode = "horizontal";
 
   // autoPlay
   @Input() autoPlay = false;
@@ -130,8 +71,8 @@ export class CarouselComponent implements OnInit, OnChanges, AfterViewInit {
   @Output() onReachBeginning = new EventEmitter();
   @Output() onReachEnd = new EventEmitter();
 
-  @ViewChild('carousel') carouselElm!: ElementRef;
-  @ViewChild('container') containerElm!: ElementRef;
+  @ViewChild("carousel", { static: true }) carouselElm!: ElementRef;
+  @ViewChild("container") containerElm!: ElementRef;
 
   constructor(private componentElement: ElementRef) {
     this.carousel = new Carousel();
@@ -147,7 +88,7 @@ export class CarouselComponent implements OnInit, OnChanges, AfterViewInit {
       }
       this.itemsCarouselRendered =
         this.carouselElm.nativeElement.getElementsByClassName(
-          'item-carousel'
+          "item-carousel"
         ).length;
     }
   }
@@ -156,7 +97,7 @@ export class CarouselComponent implements OnInit, OnChanges, AfterViewInit {
     this.onInit.emit(this.carousel);
     this.itemsCarouselRendered =
       this.carouselElm.nativeElement.getElementsByClassName(
-        'item-carousel'
+        "item-carousel"
       ).length;
   }
 
@@ -176,7 +117,7 @@ export class CarouselComponent implements OnInit, OnChanges, AfterViewInit {
     this.initEventsPan();
     this.configPlugin();
     setTimeout(() => {
-      this.componentElement.nativeElement.className += ' ready';
+      this.componentElement.nativeElement.className += " ready";
     });
     this.onReady.emit(this.carousel);
   }
@@ -220,7 +161,7 @@ export class CarouselComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   public toggleMode() {
-    this.mode = this.mode === 'vertical' ? 'horizontal' : 'vertical';
+    this.mode = this.mode === "vertical" ? "horizontal" : "vertical";
     this.update();
   }
 
@@ -233,7 +174,7 @@ export class CarouselComponent implements OnInit, OnChanges, AfterViewInit {
     this.setPerspectiveContainer();
     this.checkRotation();
     this.carousel.items = Array.from(
-      this.carouselElm.nativeElement.getElementsByClassName('item-carousel')
+      this.carouselElm.nativeElement.getElementsByClassName("item-carousel")
     );
     this.carousel.totalItems = this.carousel.items.length;
     this.getmaxSizes();
@@ -315,8 +256,8 @@ export class CarouselComponent implements OnInit, OnChanges, AfterViewInit {
     }
   }
   private checkRotation() {
-    this.carousel.isHorizontal = this.mode !== 'vertical';
-    this.rotationFn = this.carousel.isHorizontal ? 'rotateY' : 'rotateX';
+    this.carousel.isHorizontal = this.mode !== "vertical";
+    this.rotationFn = this.carousel.isHorizontal ? "rotateY" : "rotateX";
   }
   private checkLimitsCarrousel(index: number) {
     return (
@@ -384,9 +325,9 @@ export class CarouselComponent implements OnInit, OnChanges, AfterViewInit {
   }
   private setContainerWithMaxSize() {
     this.containerElm.nativeElement.style.width =
-      this.carousel.maxWidthSize + 'px';
+      this.carousel.maxWidthSize + "px";
     this.containerElm.nativeElement.style.height =
-      this.carousel.maxHeightSize + 'px';
+      this.carousel.maxHeightSize + "px";
   }
   private setDegreesOnSlides() {
     let auxDegree = 0;
@@ -435,20 +376,20 @@ export class CarouselComponent implements OnInit, OnChanges, AfterViewInit {
     const vm = this;
     const currentIndex = vm.carousel.activeIndex;
     const actual = this.carousel.items[currentIndex];
-    vm.removeClassShowSlides('actual');
-    vm.removeClassShowSlides('prev');
-    vm.removeClassShowSlides('next');
+    vm.removeClassShowSlides("actual");
+    vm.removeClassShowSlides("prev");
+    vm.removeClassShowSlides("next");
     if (actual) {
-      actual.className += ' actual';
+      actual.className += " actual";
     }
     for (let x = 0; x < this.morePairSlides; x++) {
       const prev = vm.carousel.items[currentIndex - (x + 1)];
       const next = vm.carousel.items[currentIndex + (x + 1)];
       if (prev) {
-        prev.className += ' prev';
+        prev.className += " prev";
       }
       if (next) {
-        next.className += ' next';
+        next.className += " next";
       }
     }
   }
@@ -459,7 +400,7 @@ export class CarouselComponent implements OnInit, OnChanges, AfterViewInit {
       Array.from(
         this.carouselElm.nativeElement.getElementsByClassName(tagClass)
       ).map((val: any) => {
-        val['classList'].remove(tagClass);
+        val["classList"].remove(tagClass);
       });
     }
   }
@@ -483,10 +424,10 @@ export class CarouselComponent implements OnInit, OnChanges, AfterViewInit {
     });
 
     this.carouselElm.nativeElement.addEventListener(
-      'transitionend',
+      "transitionend",
       (e: any) => {
         const elm = { carousel: vm.carousel, event: e };
-        if (e.propertyName === 'transform') {
+        if (e.propertyName === "transform") {
           this.onTransitionEnd.emit(elm);
           if (vm.carousel.lastIndex > vm.carousel.activeIndex) {
             this.onSlideNextTransitionEnd.emit(elm);
@@ -498,10 +439,10 @@ export class CarouselComponent implements OnInit, OnChanges, AfterViewInit {
     );
 
     this.carouselElm.nativeElement.addEventListener(
-      'transitionstart',
+      "transitionstart",
       (e: any) => {
         const elm = { carousel: vm.carousel, event: e };
-        if (e.propertyName === 'transform') {
+        if (e.propertyName === "transform") {
           this.onTransitionStart.emit(elm);
           // if (e.direction === Hammer.DIRECTION_LEFT) {
           //   vm.onSlideNextTransitionStart.emit(elm);
@@ -511,7 +452,7 @@ export class CarouselComponent implements OnInit, OnChanges, AfterViewInit {
         }
       }
     );
-    window.addEventListener('resize', () => {
+    window.addEventListener("resize", () => {
       this.update();
     });
   }
